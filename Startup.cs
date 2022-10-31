@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ZedCrestBankApi.Services;
+using ZedCrestBankApi.Services.Implementation;
 using ZedCrestBankApi.ZDbContext;
 
 namespace ZedCrestBankApi
@@ -28,13 +31,17 @@ namespace ZedCrestBankApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ZedCrestBankingApiContext>(x => x.UseSqlServer(Configuration.GetConnectionString("ZedCrestBankingApiContext")));
-
+            services.AddDbContext<ZedCrestBankingApiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnectionString")));
+            services.AddScoped<IWalletService, WalletService>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ZedCrestBankApi", Version = "v1" });
             });
+
+            services.AddMediatR(typeof(Startup));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
