@@ -15,6 +15,6 @@ namespace ZedCrestBankApi.ZDbContext
         }
 
         public DbSet<WalletAccount> WalletAccounts { get; set; }
-        public DbSet<Transcation> Transcations { get; set; }
+        public DbSet<Transaction> Transcations { get; set; }
     }
 }
